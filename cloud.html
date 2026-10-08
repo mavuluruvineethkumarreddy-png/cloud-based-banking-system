@@ -1,0 +1,2722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CloudBank - Cloud Banking Management System</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+    color:#1f2937;
+    transition:.3s;
+}
+
+body.dark{
+    background:#111827;
+    color:#f9fafb;
+}
+
+.hidden{
+    display:none!important;
+}
+
+button{
+    cursor:pointer;
+    border:none;
+}
+
+input,select{
+    width:100%;
+    padding:12px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    outline:none;
+}
+
+.primary{
+    background:#2563eb;
+    color:white;
+    padding:12px 18px;
+    border-radius:8px;
+}
+
+.success{
+    background:#16a34a;
+    color:white;
+    padding:10px 15px;
+    border-radius:8px;
+}
+
+.danger{
+    background:#dc2626;
+    color:white;
+    padding:10px 15px;
+    border-radius:8px;
+}
+
+.secondary{
+    background:#e5e7eb;
+    padding:10px 15px;
+    border-radius:8px;
+}
+
+/* ================= AUTH ================= */
+
+.auth{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#1d4ed8,#06b6d4);
+}
+
+.auth-box{
+    width:420px;
+    max-width:92%;
+    background:white;
+    padding:35px;
+    border-radius:18px;
+    box-shadow:0 20px 50px rgba(0,0,0,.2);
+}
+
+.auth-box h1{
+    text-align:center;
+    color:#2563eb;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#6b7280;
+    margin-bottom:25px;
+}
+
+.form-group{
+    margin-bottom:16px;
+}
+
+.form-group label{
+    font-weight:bold;
+}
+
+.password{
+    display:flex;
+}
+
+.password input{
+    border-radius:8px 0 0 8px;
+}
+
+.password button{
+    width:50px;
+    background:#e5e7eb;
+    border-radius:0 8px 8px 0;
+}
+
+.auth .primary{
+    width:100%;
+}
+
+.switch{
+    text-align:center;
+    margin-top:18px;
+}
+
+.switch span{
+    color:#2563eb;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.demo{
+    margin-top:15px;
+    padding:12px;
+    background:#eff6ff;
+    border-radius:8px;
+    font-size:13px;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+    height:70px;
+    background:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 28px;
+    box-shadow:0 2px 12px rgba(0,0,0,.08);
+}
+
+.dark .navbar,
+.dark .sidebar,
+.dark .card,
+.dark .stat,
+.dark .transaction-card,
+.dark .modal-box{
+    background:#1f2937;
+}
+
+.logo{
+    color:#2563eb;
+    font-size:24px;
+    font-weight:bold;
+}
+
+.nav-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.nav-btn{
+    background:#eff6ff;
+    padding:9px 13px;
+    border-radius:7px;
+}
+
+.logout{
+    background:#ef4444;
+    color:white;
+}
+
+/* ================= LAYOUT ================= */
+
+.layout{
+    display:flex;
+    min-height:calc(100vh - 70px);
+}
+
+.sidebar{
+    width:235px;
+    background:white;
+    padding:20px 14px;
+    box-shadow:2px 0 10px rgba(0,0,0,.05);
+}
+
+.sidebar button{
+    width:100%;
+    padding:13px;
+    margin-bottom:7px;
+    background:transparent;
+    text-align:left;
+    border-radius:8px;
+}
+
+.sidebar button:hover{
+    background:#eff6ff;
+    color:#2563eb;
+}
+
+.content{
+    flex:1;
+    padding:30px;
+}
+
+.page-title{
+    margin-bottom:25px;
+}
+
+.page-title h1{
+    margin-bottom:5px;
+}
+
+/* ================= STATS ================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.stat{
+    background:white;
+    padding:22px;
+    border-radius:12px;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+.stat h4{
+    color:#6b7280;
+}
+
+.stat h2{
+    margin-top:8px;
+    color:#2563eb;
+}
+
+/* ================= BANK CARD ================= */
+
+.bank-card{
+    background:linear-gradient(135deg,#1e3a8a,#2563eb,#06b6d4);
+    color:white;
+    border-radius:18px;
+    padding:25px;
+    max-width:600px;
+    min-height:220px;
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+    margin-bottom:25px;
+}
+
+.bank-card h3{
+    font-size:20px;
+}
+
+.bank-card .balance{
+    font-size:35px;
+    font-weight:bold;
+    margin:30px 0;
+}
+
+.card-number{
+    letter-spacing:3px;
+}
+
+/* ================= CARDS ================= */
+
+.card{
+    background:white;
+    padding:22px;
+    border-radius:12px;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+    margin-bottom:20px;
+}
+
+.actions{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:25px;
+}
+
+.action{
+    padding:18px;
+    border-radius:10px;
+    background:#eff6ff;
+    color:#1d4ed8;
+    font-weight:bold;
+}
+
+/* ================= TABLE ================= */
+
+.table-container{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:13px;
+    border-bottom:1px solid #e5e7eb;
+    text-align:left;
+}
+
+th{
+    background:#eff6ff;
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+}
+
+.modal-box{
+    width:450px;
+    max-width:92%;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+}
+
+.modal-box h2{
+    margin-bottom:20px;
+}
+
+.close{
+    float:right;
+    background:#ef4444;
+    color:white;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+}
+
+/* ================= NOTIFICATION ================= */
+
+.notification{
+    position:fixed;
+    top:85px;
+    right:25px;
+    background:#111827;
+    color:white;
+    padding:15px 20px;
+    border-radius:8px;
+    display:none;
+    z-index:200;
+}
+
+/* ================= PROFILE ================= */
+
+.profile-row{
+    margin-bottom:18px;
+}
+
+.profile-row strong{
+    display:block;
+    margin-bottom:5px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .actions{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .sidebar{
+        width:190px;
+    }
+}
+
+@media(max-width:650px){
+
+    .layout{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        display:flex;
+        overflow-x:auto;
+    }
+
+    .sidebar button{
+        min-width:130px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .actions{
+        grid-template-columns:1fr;
+    }
+
+    .content{
+        padding:15px;
+    }
+
+    .username{
+        display:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+LOGIN
+===================================================== -->
+
+<div id="loginScreen" class="auth">
+
+<div class="auth-box">
+
+<h1>🏦 CloudBank</h1>
+
+<p class="subtitle">
+Cloud Banking Management System
+</p>
+
+<form id="loginForm">
+
+<div class="form-group">
+
+<label>Email</label>
+
+<input
+type="email"
+id="loginEmail"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>Password</label>
+
+<div class="password">
+
+<input
+type="password"
+id="loginPassword"
+required>
+
+<button
+type="button"
+onclick="togglePassword('loginPassword')">
+👁
+</button>
+
+</div>
+
+</div>
+
+<button class="primary">
+Login
+</button>
+
+</form>
+
+<div class="demo">
+
+<b>Demo Admin Account</b><br>
+
+Email:
+admin@cloudbank.com<br>
+
+Password:
+admin123
+
+</div>
+
+<div class="switch">
+
+Don't have an account?
+
+<span onclick="showSignup()">
+Sign Up
+</span>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- =====================================================
+SIGN UP
+===================================================== -->
+
+<div id="signupScreen" class="auth hidden">
+
+<div class="auth-box">
+
+<h1>📝 Create Account</h1>
+
+<p class="subtitle">
+Open your CloudBank account
+</p>
+
+<form id="signupForm">
+
+<div class="form-group">
+
+<label>Full Name</label>
+
+<input
+type="text"
+id="signupName"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>Email</label>
+
+<input
+type="email"
+id="signupEmail"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>Password</label>
+
+<div class="password">
+
+<input
+type="password"
+id="signupPassword"
+minlength="6"
+required>
+
+<button
+type="button"
+onclick="togglePassword('signupPassword')">
+👁
+</button>
+
+</div>
+
+</div>
+
+<div class="form-group">
+
+<label>Account Type</label>
+
+<select id="signupRole">
+
+<option value="customer">
+Customer
+</option>
+
+<option value="admin">
+Admin
+</option>
+
+</select>
+
+</div>
+
+<button class="primary">
+Create Account
+</button>
+
+</form>
+
+<div class="switch">
+
+Already have an account?
+
+<span onclick="showLogin()">
+Login
+</span>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- =====================================================
+APPLICATION
+===================================================== -->
+
+<div id="application" class="hidden">
+
+<nav class="navbar">
+
+<div class="logo">
+🏦 CloudBank
+</div>
+
+<div class="nav-actions">
+
+<span class="username"
+id="welcomeUser">
+</span>
+
+<button
+class="nav-btn"
+onclick="toggleDarkMode()">
+🌙
+</button>
+
+<button
+class="nav-btn"
+onclick="notify('🔔 No new notifications')">
+🔔
+</button>
+
+<button
+class="nav-btn logout"
+onclick="logout()">
+Logout
+</button>
+
+</div>
+
+</nav>
+
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+<button onclick="showPage('dashboard')">
+🏠 Dashboard
+</button>
+
+<button onclick="showPage('transfer')">
+💸 Transfer Money
+</button>
+
+<button onclick="showPage('deposit')">
+📥 Deposit
+</button>
+
+<button onclick="showPage('withdraw')">
+📤 Withdraw
+</button>
+
+<button onclick="showPage('transactions')">
+📜 Transactions
+</button>
+
+<button onclick="showPage('card')">
+💳 My Card
+</button>
+
+<button onclick="showPage('beneficiaries')">
+👥 Beneficiaries
+</button>
+
+<button onclick="showPage('profile')">
+👤 Profile
+</button>
+
+<button onclick="showPage('security')">
+🔐 Security
+</button>
+
+<button
+id="adminButton"
+onclick="showPage('admin')">
+🛡️ Admin Panel
+</button>
+
+</aside>
+
+
+<main class="content">
+
+<!-- =====================================================
+DASHBOARD
+===================================================== -->
+
+<section id="dashboardPage">
+
+<div class="page-title">
+
+<h1>Banking Dashboard</h1>
+
+<p>
+Welcome back to CloudBank.
+</p>
+
+</div>
+
+
+<div class="stats">
+
+<div class="stat">
+
+<h4>Available Balance</h4>
+
+<h2 id="balanceStat">
+₹0
+</h2>
+
+</div>
+
+<div class="stat">
+
+<h4>Total Deposits</h4>
+
+<h2 id="depositStat">
+₹0
+</h2>
+
+</div>
+
+<div class="stat">
+
+<h4>Total Withdrawals</h4>
+
+<h2 id="withdrawStat">
+₹0
+</h2>
+
+</div>
+
+<div class="stat">
+
+<h4>Transactions</h4>
+
+<h2 id="transactionStat">
+0
+</h2>
+
+</div>
+
+</div>
+
+
+<div class="bank-card">
+
+<h3>CloudBank Premium</h3>
+
+<div class="balance">
+
+₹<span id="cardBalance">
+0
+</span>
+
+</div>
+
+<div class="card-number">
+**** **** **** 4829
+</div>
+
+<br>
+
+<span id="cardHolder">
+CARD HOLDER
+</span>
+
+</div>
+
+
+<div class="actions">
+
+<button
+class="action"
+onclick="showPage('transfer')">
+
+💸<br>
+Transfer
+
+</button>
+
+<button
+class="action"
+onclick="showPage('deposit')">
+
+📥<br>
+Deposit
+
+</button>
+
+<button
+class="action"
+onclick="showPage('withdraw')">
+
+📤<br>
+Withdraw
+
+</button>
+
+<button
+class="action"
+onclick="showPage('transactions')">
+
+📜<br>
+Statement
+
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h2>✨ Latest CloudBank Features</h2>
+
+<br>
+
+<p>🔐 Secure authentication</p>
+<p>💰 Real-time account balance</p>
+<p>💸 Online money transfer</p>
+<p>📥 Digital deposits</p>
+<p>📤 Online withdrawals</p>
+<p>💳 Virtual debit card</p>
+<p>📜 Transaction statements</p>
+<p>👥 Beneficiary management</p>
+<p>🔔 Smart notifications</p>
+<p>📊 Financial analytics</p>
+<p>🌙 Dark mode</p>
+<p>🔒 Security management</p>
+<p>☁️ Cloud-ready architecture</p>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+TRANSFER
+===================================================== -->
+
+<section id="transferPage" class="hidden">
+
+<div class="page-title">
+
+<h1>💸 Transfer Money</h1>
+
+</div>
+
+<div class="card">
+
+<form id="transferForm">
+
+<div class="form-group">
+
+<label>Beneficiary Name</label>
+
+<input
+type="text"
+id="transferName"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>Account Number</label>
+
+<input
+type="text"
+id="transferAccount"
+maxlength="16"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>Amount</label>
+
+<input
+type="number"
+id="transferAmount"
+min="1"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>Description</label>
+
+<input
+type="text"
+id="transferDescription"
+placeholder="Optional">
+
+</div>
+
+<button class="primary">
+Transfer Money
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+DEPOSIT
+===================================================== -->
+
+<section id="depositPage" class="hidden">
+
+<div class="page-title">
+
+<h1>📥 Deposit Money</h1>
+
+</div>
+
+<div class="card">
+
+<form id="depositForm">
+
+<div class="form-group">
+
+<label>Deposit Amount</label>
+
+<input
+type="number"
+id="depositAmount"
+min="1"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>Deposit Method</label>
+
+<select id="depositMethod">
+
+<option>Bank Transfer</option>
+<option>UPI</option>
+<option>Debit Card</option>
+<option>Cash Deposit</option>
+
+</select>
+
+</div>
+
+<button class="success">
+Deposit Money
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+WITHDRAW
+===================================================== -->
+
+<section id="withdrawPage" class="hidden">
+
+<div class="page-title">
+
+<h1>📤 Withdraw Money</h1>
+
+</div>
+
+<div class="card">
+
+<p>
+Available Balance:
+<b>₹<span id="withdrawBalance">0</span></b>
+</p>
+
+<br>
+
+<form id="withdrawForm">
+
+<div class="form-group">
+
+<label>Withdrawal Amount</label>
+
+<input
+type="number"
+id="withdrawAmount"
+min="1"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>Withdrawal Method</label>
+
+<select id="withdrawMethod">
+
+<option>ATM</option>
+<option>Bank Transfer</option>
+<option>UPI</option>
+
+</select>
+
+</div>
+
+<button class="danger">
+Withdraw
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+TRANSACTIONS
+===================================================== -->
+
+<section id="transactionsPage" class="hidden">
+
+<div class="page-title">
+
+<h1>📜 Transaction History</h1>
+
+</div>
+
+<div class="card">
+
+<div style="display:flex;gap:10px;margin-bottom:20px">
+
+<input
+id="transactionSearch"
+placeholder="Search transactions..."
+oninput="displayTransactions()">
+
+<button
+class="primary"
+onclick="downloadStatement()">
+
+📥 Download
+
+</button>
+
+</div>
+
+<div class="table-container">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Date</th>
+<th>Type</th>
+<th>Description</th>
+<th>Amount</th>
+<th>Status</th>
+</tr>
+
+</thead>
+
+<tbody id="transactionTable">
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+CARD
+===================================================== -->
+
+<section id="cardPage" class="hidden">
+
+<div class="page-title">
+
+<h1>💳 Virtual Debit Card</h1>
+
+</div>
+
+<div class="bank-card">
+
+<h3>CloudBank</h3>
+
+<div class="balance">
+VIRTUAL DEBIT
+</div>
+
+<div class="card-number">
+4829 **** **** 7392
+</div>
+
+<br>
+
+<div>
+VALID THRU: 12/30
+</div>
+
+<br>
+
+<div id="virtualCardHolder">
+CARD HOLDER
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Card Security</h2>
+
+<br>
+
+<p>🔒 Online transactions protected</p>
+<p>🔐 PIN protected</p>
+<p>📱 Transaction notifications enabled</p>
+<p>🛡️ Card monitoring active</p>
+
+<br>
+
+<button
+class="danger"
+onclick="notify('Card temporarily blocked')">
+
+Block Card
+
+</button>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+BENEFICIARIES
+===================================================== -->
+
+<section id="beneficiariesPage" class="hidden">
+
+<div class="page-title">
+
+<h1>👥 Beneficiaries</h1>
+
+</div>
+
+<div class="card">
+
+<button
+class="primary"
+onclick="addBeneficiary()">
+
++ Add Beneficiary
+
+</button>
+
+<br><br>
+
+<div id="beneficiaryList">
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+PROFILE
+===================================================== -->
+
+<section id="profilePage" class="hidden">
+
+<div class="page-title">
+
+<h1>👤 My Profile</h1>
+
+</div>
+
+<div class="card">
+
+<div class="profile-row">
+
+<strong>Name</strong>
+
+<span id="profileName"></span>
+
+</div>
+
+<div class="profile-row">
+
+<strong>Email</strong>
+
+<span id="profileEmail"></span>
+
+</div>
+
+<div class="profile-row">
+
+<strong>Account Type</strong>
+
+<span id="profileRole"></span>
+
+</div>
+
+<div class="profile-row">
+
+<strong>Account Number</strong>
+
+<span>XXXX XXXX 4829</span>
+
+</div>
+
+<div class="profile-row">
+
+<strong>Bank</strong>
+
+<span>CloudBank Digital Banking</span>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+SECURITY
+===================================================== -->
+
+<section id="securityPage" class="hidden">
+
+<div class="page-title">
+
+<h1>🔐 Security Settings</h1>
+
+</div>
+
+<div class="card">
+
+<h3>Password</h3>
+
+<br>
+
+<button
+class="primary"
+onclick="changePassword()">
+
+Change Password
+
+</button>
+
+<br><br>
+
+<h3>Transaction PIN</h3>
+
+<br>
+
+<button
+class="secondary"
+onclick="changePIN()">
+
+Change PIN
+
+</button>
+
+<br><br>
+
+<h3>Two-Factor Authentication</h3>
+
+<br>
+
+<button
+class="success"
+onclick="notify('2FA enabled successfully')">
+
+Enable 2FA
+
+</button>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+ADMIN
+===================================================== -->
+
+<section id="adminPage" class="hidden">
+
+<div class="page-title">
+
+<h1>🛡️ Admin Dashboard</h1>
+
+</div>
+
+<div class="stats">
+
+<div class="stat">
+
+<h4>Total Users</h4>
+
+<h2 id="adminUsers">
+0
+</h2>
+
+</div>
+
+<div class="stat">
+
+<h4>Total Transactions</h4>
+
+<h2 id="adminTransactions">
+0
+</h2>
+
+</div>
+
+<div class="stat">
+
+<h4>Total Deposits</h4>
+
+<h2 id="adminDeposits">
+₹0
+</h2>
+
+</div>
+
+<div class="stat">
+
+<h4>Total Withdrawals</h4>
+
+<h2 id="adminWithdrawals">
+₹0
+</h2>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>System Information</h2>
+
+<br>
+
+<p>☁️ Cloud service: Active</p>
+<p>🔐 Authentication: Active</p>
+<p>🛡️ Security monitoring: Active</p>
+<p>💳 Payment system: Active</p>
+<p>📊 Analytics: Active</p>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+</div>
+
+
+<!-- NOTIFICATION -->
+
+<div id="notification"
+class="notification">
+</div>
+
+
+<script>
+
+/* =====================================================
+DATA
+===================================================== */
+
+let users =
+JSON.parse(
+localStorage.getItem("cloudBankUsers")
+) || [
+
+{
+name:"CloudBank Admin",
+email:"admin@cloudbank.com",
+password:"admin123",
+role:"admin",
+balance:100000
+}
+
+];
+
+
+let accounts =
+JSON.parse(
+localStorage.getItem("cloudBankAccounts")
+) || {};
+
+
+let transactions =
+JSON.parse(
+localStorage.getItem("cloudBankTransactions")
+) || [];
+
+
+let beneficiaries =
+JSON.parse(
+localStorage.getItem("cloudBankBeneficiaries")
+) || [];
+
+
+let currentUser =
+JSON.parse(
+localStorage.getItem("cloudBankCurrentUser")
+) || null;
+
+
+/* =====================================================
+INITIALIZE
+===================================================== */
+
+window.onload=function(){
+
+if(currentUser){
+
+openApplication();
+
+}
+
+};
+
+
+/* =====================================================
+AUTH
+===================================================== */
+
+function showSignup(){
+
+document
+.getElementById("loginScreen")
+.classList.add("hidden");
+
+document
+.getElementById("signupScreen")
+.classList.remove("hidden");
+
+}
+
+
+function showLogin(){
+
+document
+.getElementById("signupScreen")
+.classList.add("hidden");
+
+document
+.getElementById("loginScreen")
+.classList.remove("hidden");
+
+}
+
+
+function togglePassword(id){
+
+let input=
+document.getElementById(id);
+
+input.type=
+input.type==="password"
+?"text"
+:"password";
+
+}
+
+
+/* LOGIN */
+
+document
+.getElementById("loginForm")
+.addEventListener(
+"submit",
+function(e){
+
+e.preventDefault();
+
+let email=
+document.getElementById(
+"loginEmail"
+).value;
+
+let password=
+document.getElementById(
+"loginPassword"
+).value;
+
+
+let user=
+users.find(
+u=>
+u.email===email &&
+u.password===password
+);
+
+
+if(!user){
+
+notify(
+"❌ Invalid email or password"
+);
+
+return;
+
+}
+
+
+currentUser=user;
+
+localStorage.setItem(
+"cloudBankCurrentUser",
+JSON.stringify(user)
+);
+
+openApplication();
+
+}
+);
+
+
+/* SIGNUP */
+
+document
+.getElementById("signupForm")
+.addEventListener(
+"submit",
+function(e){
+
+e.preventDefault();
+
+
+let name=
+document.getElementById(
+"signupName"
+).value;
+
+let email=
+document.getElementById(
+"signupEmail"
+).value;
+
+let password=
+document.getElementById(
+"signupPassword"
+).value;
+
+let role=
+document.getElementById(
+"signupRole"
+).value;
+
+
+if(
+users.some(
+u=>u.email===email
+)
+){
+
+notify(
+"❌ Email already registered"
+);
+
+return;
+
+}
+
+
+let user={
+
+name,
+email,
+password,
+role,
+balance:5000
+
+};
+
+
+users.push(user);
+
+
+localStorage.setItem(
+"cloudBankUsers",
+JSON.stringify(users)
+);
+
+
+notify(
+"✅ Account created successfully"
+);
+
+
+setTimeout(
+showLogin,
+1000
+);
+
+}
+);
+
+
+/* LOGOUT */
+
+function logout(){
+
+localStorage.removeItem(
+"cloudBankCurrentUser"
+);
+
+currentUser=null;
+
+
+document
+.getElementById("application")
+.classList.add("hidden");
+
+document
+.getElementById("loginScreen")
+.classList.remove("hidden");
+
+}
+
+
+/* =====================================================
+APPLICATION
+===================================================== */
+
+function openApplication(){
+
+document
+.getElementById("loginScreen")
+.classList.add("hidden");
+
+document
+.getElementById("signupScreen")
+.classList.add("hidden");
+
+document
+.getElementById("application")
+.classList.remove("hidden");
+
+
+document
+.getElementById("welcomeUser")
+.textContent=
+"Hi, "+currentUser.name;
+
+
+document
+.getElementById("adminButton")
+.style.display=
+currentUser.role==="admin"
+?"block"
+:"none";
+
+
+updateDashboard();
+
+displayTransactions();
+
+displayBeneficiaries();
+
+}
+
+
+/* =====================================================
+PAGE NAVIGATION
+===================================================== */
+
+function showPage(page){
+
+let pages=[
+"dashboard",
+"transfer",
+"deposit",
+"withdraw",
+"transactions",
+"card",
+"beneficiaries",
+"profile",
+"security",
+"admin"
+];
+
+
+pages.forEach(
+p=>
+document
+.getElementById(p+"Page")
+.classList.add("hidden")
+);
+
+
+document
+.getElementById(page+"Page")
+.classList.remove("hidden");
+
+
+if(page==="dashboard")
+updateDashboard();
+
+if(page==="transactions")
+displayTransactions();
+
+if(page==="beneficiaries")
+displayBeneficiaries();
+
+if(page==="profile")
+displayProfile();
+
+if(page==="admin")
+displayAdmin();
+
+if(page==="withdraw")
+updateWithdrawBalance();
+
+}
+
+
+/* =====================================================
+ACCOUNT
+===================================================== */
+
+function getBalance(){
+
+let user=
+users.find(
+u=>u.email===currentUser.email
+);
+
+return user ? user.balance : 0;
+
+}
+
+
+function updateUserBalance(amount){
+
+let user=
+users.find(
+u=>u.email===currentUser.email
+);
+
+if(user){
+
+user.balance+=amount;
+
+currentUser=user;
+
+localStorage.setItem(
+"cloudBankUsers",
+JSON.stringify(users)
+);
+
+localStorage.setItem(
+"cloudBankCurrentUser",
+JSON.stringify(user)
+);
+
+}
+
+}
+
+
+/* =====================================================
+DASHBOARD
+===================================================== */
+
+function updateDashboard(){
+
+let balance=getBalance();
+
+
+document
+.getElementById("balanceStat")
+.textContent=
+"₹"+balance.toLocaleString();
+
+
+document
+.getElementById("cardBalance")
+.textContent=
+balance.toLocaleString();
+
+
+document
+.getElementById("withdrawBalance")
+.textContent=
+balance.toLocaleString();
+
+
+document
+.getElementById("cardHolder")
+.textContent=
+currentUser.name.toUpperCase();
+
+
+document
+.getElementById("virtualCardHolder")
+.textContent=
+currentUser.name.toUpperCase();
+
+
+let mine=
+transactions.filter(
+t=>t.user===currentUser.email
+);
+
+
+document
+.getElementById("transactionStat")
+.textContent=
+mine.length;
+
+
+let deposits=
+mine
+.filter(
+t=>t.type==="Deposit"
+)
+.reduce(
+(s,t)=>s+t.amount,
+0
+);
+
+
+let withdrawals=
+mine
+.filter(
+t=>
+t.type==="Withdrawal" ||
+t.type==="Transfer"
+)
+.reduce(
+(s,t)=>s+t.amount,
+0
+);
+
+
+document
+.getElementById("depositStat")
+.textContent=
+"₹"+deposits.toLocaleString();
+
+
+document
+.getElementById("withdrawStat")
+.textContent=
+"₹"+withdrawals.toLocaleString();
+
+}
+
+
+/* =====================================================
+TRANSFER
+===================================================== */
+
+document
+.getElementById("transferForm")
+.addEventListener(
+"submit",
+function(e){
+
+e.preventDefault();
+
+
+let name=
+document.getElementById(
+"transferName"
+).value;
+
+let account=
+document.getElementById(
+"transferAccount"
+).value;
+
+let amount=
+Number(
+document.getElementById(
+"transferAmount"
+).value
+);
+
+let description=
+document.getElementById(
+"transferDescription"
+).value;
+
+
+if(amount<=0){
+
+notify(
+"❌ Invalid amount"
+);
+
+return;
+
+}
+
+
+if(amount>getBalance()){
+
+notify(
+"❌ Insufficient balance"
+);
+
+return;
+
+}
+
+
+updateUserBalance(-amount);
+
+
+transactions.push({
+
+id:Date.now(),
+
+user:currentUser.email,
+
+type:"Transfer",
+
+description:
+"Transfer to "+name+
+" ("+account+") "+
+description,
+
+amount:amount,
+
+date:new Date().toLocaleString(),
+
+status:"Completed"
+
+});
+
+
+saveTransactions();
+
+
+notify(
+"✅ Money transferred successfully"
+);
+
+
+document
+.getElementById("transferForm")
+.reset();
+
+
+updateDashboard();
+
+}
+);
+
+
+/* =====================================================
+DEPOSIT
+===================================================== */
+
+document
+.getElementById("depositForm")
+.addEventListener(
+"submit",
+function(e){
+
+e.preventDefault();
+
+
+let amount=
+Number(
+document.getElementById(
+"depositAmount"
+).value
+);
+
+
+if(amount<=0)return;
+
+
+let method=
+document.getElementById(
+"depositMethod"
+).value;
+
+
+updateUserBalance(amount);
+
+
+transactions.push({
+
+id:Date.now(),
+
+user:currentUser.email,
+
+type:"Deposit",
+
+description:
+"Deposit via "+method,
+
+amount:amount,
+
+date:new Date().toLocaleString(),
+
+status:"Completed"
+
+});
+
+
+saveTransactions();
+
+
+notify(
+"✅ ₹"+amount+
+" deposited successfully"
+);
+
+
+document
+.getElementById("depositForm")
+.reset();
+
+
+updateDashboard();
+
+}
+);
+
+
+/* =====================================================
+WITHDRAW
+===================================================== */
+
+document
+.getElementById("withdrawForm")
+.addEventListener(
+"submit",
+function(e){
+
+e.preventDefault();
+
+
+let amount=
+Number(
+document.getElementById(
+"withdrawAmount"
+).value
+);
+
+
+if(amount>getBalance()){
+
+notify(
+"❌ Insufficient balance"
+);
+
+return;
+
+}
+
+
+let method=
+document.getElementById(
+"withdrawMethod"
+).value;
+
+
+updateUserBalance(-amount);
+
+
+transactions.push({
+
+id:Date.now(),
+
+user:currentUser.email,
+
+type:"Withdrawal",
+
+description:
+"Withdrawal via "+method,
+
+amount:amount,
+
+date:new Date().toLocaleString(),
+
+status:"Completed"
+
+});
+
+
+saveTransactions();
+
+
+notify(
+"✅ Withdrawal successful"
+);
+
+
+document
+.getElementById("withdrawForm")
+.reset();
+
+
+updateDashboard();
+
+}
+);
+
+
+/* =====================================================
+TRANSACTIONS
+===================================================== */
+
+function saveTransactions(){
+
+localStorage.setItem(
+"cloudBankTransactions",
+JSON.stringify(transactions)
+);
+
+}
+
+
+function displayTransactions(){
+
+let table=
+document.getElementById(
+"transactionTable"
+);
+
+if(!table)return;
+
+
+let search=
+(
+document.getElementById(
+"transactionSearch"
+)?.value||""
+)
+.toLowerCase();
+
+
+let mine=
+transactions.filter(
+t=>
+t.user===currentUser.email
+);
+
+
+mine=mine.filter(
+t=>
+t.type.toLowerCase().includes(search) ||
+t.description.toLowerCase().includes(search)
+);
+
+
+table.innerHTML="";
+
+
+if(mine.length===0){
+
+table.innerHTML=`
+
+<tr>
+
+<td colspan="5">
+No transactions found.
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
+
+
+mine
+.slice()
+.reverse()
+.forEach(t=>{
+
+let sign=
+t.type==="Deposit"
+?"+"
+:"-";
+
+
+table.innerHTML+=`
+
+<tr>
+
+<td>${t.date}</td>
+
+<td>${t.type}</td>
+
+<td>${t.description}</td>
+
+<td>
+${sign}₹${t.amount.toLocaleString()}
+</td>
+
+<td>${t.status}</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+
+/* =====================================================
+STATEMENT DOWNLOAD
+===================================================== */
+
+function downloadStatement(){
+
+let mine=
+transactions.filter(
+t=>t.user===currentUser.email
+);
+
+
+let text=
+"CloudBank Transaction Statement\n\n";
+
+text+=
+"Account Holder: "+
+currentUser.name+
+"\n";
+
+text+=
+"Email: "+
+currentUser.email+
+"\n\n";
+
+
+mine.forEach(t=>{
+
+text+=
+t.date+
+" | "+
+t.type+
+" | "+
+t.description+
+" | ₹"+
+t.amount+
+" | "+
+t.status+
+"\n";
+
+});
+
+
+let blob=
+new Blob(
+[text],
+{
+type:"text/plain"
+}
+);
+
+
+let url=
+URL.createObjectURL(blob);
+
+
+let a=
+document.createElement("a");
+
+a.href=url;
+
+a.download=
+"CloudBank-Statement.txt";
+
+a.click();
+
+
+URL.revokeObjectURL(url);
+
+}
+
+
+/* =====================================================
+BENEFICIARIES
+===================================================== */
+
+function addBeneficiary(){
+
+let name=
+prompt("Beneficiary name:");
+
+if(!name)return;
+
+
+let account=
+prompt("Account number:");
+
+if(!account)return;
+
+
+beneficiaries.push({
+
+user:currentUser.email,
+
+name,
+
+account
+
+});
+
+
+localStorage.setItem(
+"cloudBankBeneficiaries",
+JSON.stringify(
+beneficiaries
+)
+);
+
+
+displayBeneficiaries();
+
+
+notify(
+"✅ Beneficiary added"
+);
+
+}
+
+
+function displayBeneficiaries(){
+
+let list=
+document.getElementById(
+"beneficiaryList"
+);
+
+if(!list)return;
+
+
+let mine=
+beneficiaries.filter(
+b=>b.user===currentUser.email
+);
+
+
+list.innerHTML="";
+
+
+if(mine.length===0){
+
+list.innerHTML=
+"<p>No beneficiaries added.</p>";
+
+return;
+
+}
+
+
+mine.forEach((b,index)=>{
+
+list.innerHTML+=`
+
+<div class="card">
+
+<h3>
+👤 ${b.name}
+</h3>
+
+<p>
+Account: ${b.account}
+</p>
+
+<br>
+
+<button
+class="danger"
+onclick="deleteBeneficiary(${index})">
+
+Remove
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+function deleteBeneficiary(index){
+
+beneficiaries.splice(index,1);
+
+localStorage.setItem(
+"cloudBankBeneficiaries",
+JSON.stringify(
+beneficiaries
+)
+);
+
+displayBeneficiaries();
+
+}
+
+
+/* =====================================================
+PROFILE
+===================================================== */
+
+function displayProfile(){
+
+document
+.getElementById("profileName")
+.textContent=
+currentUser.name;
+
+document
+.getElementById("profileEmail")
+.textContent=
+currentUser.email;
+
+document
+.getElementById("profileRole")
+.textContent=
+currentUser.role==="admin"
+?"Administrator"
+:"Customer";
+
+}
+
+
+/* =====================================================
+SECURITY
+===================================================== */
+
+function changePassword(){
+
+let oldPassword=
+prompt("Enter current password:");
+
+if(oldPassword!==currentUser.password){
+
+notify(
+"❌ Incorrect current password"
+);
+
+return;
+
+}
+
+
+let newPassword=
+prompt("Enter new password:");
+
+if(!newPassword || newPassword.length<6){
+
+notify(
+"❌ Password must contain at least 6 characters"
+);
+
+return;
+
+}
+
+
+let user=
+users.find(
+u=>u.email===currentUser.email
+);
+
+
+user.password=newPassword;
+
+currentUser=user;
+
+
+localStorage.setItem(
+"cloudBankUsers",
+JSON.stringify(users)
+);
+
+localStorage.setItem(
+"cloudBankCurrentUser",
+JSON.stringify(user)
+);
+
+
+notify(
+"✅ Password changed"
+);
+
+}
+
+
+function changePIN(){
+
+let pin=
+prompt(
+"Enter new 4-digit transaction PIN:"
+);
+
+
+if(!/^\d{4}$/.test(pin)){
+
+notify(
+"❌ PIN must be exactly 4 digits"
+);
+
+return;
+
+}
+
+
+localStorage.setItem(
+"cloudBankPIN_"+currentUser.email,
+pin
+);
+
+
+notify(
+"✅ Transaction PIN updated"
+);
+
+}
+
+
+/* =====================================================
+ADMIN
+===================================================== */
+
+function displayAdmin(){
+
+if(currentUser.role!=="admin"){
+
+notify(
+"❌ Admin access required"
+);
+
+return;
+
+}
+
+
+document
+.getElementById("adminUsers")
+.textContent=
+users.length;
+
+
+document
+.getElementById("adminTransactions")
+.textContent=
+transactions.length;
+
+
+let deposits=
+transactions
+.filter(
+t=>t.type==="Deposit"
+)
+.reduce(
+(s,t)=>s+t.amount,
+0
+);
+
+
+let withdrawals=
+transactions
+.filter(
+t=>
+t.type==="Withdrawal" ||
+t.type==="Transfer"
+)
+.reduce(
+(s,t)=>s+t.amount,
+0
+);
+
+
+document
+.getElementById("adminDeposits")
+.textContent=
+"₹"+deposits.toLocaleString();
+
+
+document
+.getElementById("adminWithdrawals")
+.textContent=
+"₹"+withdrawals.toLocaleString();
+
+}
+
+
+/* =====================================================
+WITHDRAW BALANCE
+===================================================== */
+
+function updateWithdrawBalance(){
+
+document
+.getElementById("withdrawBalance")
+.textContent=
+getBalance().toLocaleString();
+
+}
+
+
+/* =====================================================
+DARK MODE
+===================================================== */
+
+function toggleDarkMode(){
+
+document
+.body
+.classList
+.toggle("dark");
+
+}
+
+
+/* =====================================================
+NOTIFICATION
+===================================================== */
+
+function notify(message){
+
+let box=
+document.getElementById(
+"notification"
+);
+
+box.textContent=message;
+
+box.style.display="block";
+
+
+setTimeout(()=>{
+
+box.style.display="none";
+
+},2500);
+
+}
+
+
+/* =====================================================
+SAVE
+===================================================== */
+
+localStorage.setItem(
+"cloudBankUsers",
+JSON.stringify(users)
+);
+
+localStorage.setItem(
+"cloudBankTransactions",
+JSON.stringify(transactions)
+);
+
+localStorage.setItem(
+"cloudBankBeneficiaries",
+JSON.stringify(beneficiaries)
+);
+
+</script>
+
+</body>
+</html>
